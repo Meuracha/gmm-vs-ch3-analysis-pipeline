@@ -1,0 +1,16 @@
+name: "gmm_vs_ch3"
+version: "1.0.0"
+config-version: 2
+
+profile: "gmm_vs_ch3"
+
+model-paths: ["models"]
+
+models:
+  gmm_vs_ch3:
+    bronze:
+      +materialized: view
+    silver:
+      +materialized: view
+    gold:
+      +materialized: table

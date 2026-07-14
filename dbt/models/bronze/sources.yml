@@ -1,0 +1,27 @@
+version: 2
+
+sources:
+  - name: bronze
+    database: "{{ env_var('GCP_PROJECT_ID') }}"
+    schema: gmm_ch3_dw
+    tables:
+      - name: bronze_youtube_engagement
+        columns:
+          - name: snapshot_date
+            tests: [not_null]
+          - name: video_id
+            tests: [not_null]
+      - name: bronze_search_interest
+        columns:
+          - name: snapshot_date
+            tests: [not_null]
+
+models:
+  - name: silver_youtube_engagement
+    columns:
+      - name: video_id
+        tests: [not_null]
+  - name: fact_content_engagement
+    columns:
+      - name: pairing_id
+        tests: [not_null]

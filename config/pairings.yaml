@@ -1,0 +1,127 @@
+# รายชื่อคู่จิ้นที่จะ track — เติม youtube_video_ids หลังจากค้นหาจริงแล้ว
+# แต่ละคู่ใส่ video_id ของ MV/trailer/clip ที่เกี่ยวข้อง (ดึงจาก YouTube URL: youtube.com/watch?v=VIDEO_ID)
+
+labels:
+  - label_id: gmmtv
+    label_name: "GMMTV"
+
+  - label_id: ch3
+    label_name: "ช่อง 3 (BEC World)"
+
+pairings:
+  # ---------- GMMTV — GL ----------
+  - pairing_id: milk_love
+    label_id: gmmtv
+    genre: GL
+    artist_1: "มิ้ลค์ พรรษา"
+    artist_2: "เลิฟ ภัทรานิษฐ์"
+    series: "Ditto ระฟ้าหล่นสวรรค์"
+    youtube_video_ids:
+      - "30LfbsWHCW4"   # Official pilot trailer Ditto (GMMTV channel, พ.ย. 2025)
+      - "lDUD3omAlHA"   # Girl Rules official trailer (Milk-Love ร่วมแสดง)
+
+  - pairing_id: namtan_film
+    label_id: gmmtv
+    genre: GL
+    artist_1: "น้ำตาล ทิพนารี"
+    artist_2: "ฟิล์ม รชานันท์"
+    series: "Girl Rules กฎหลัก...ห้ามรักเธอ"
+    youtube_video_ids:
+      - "lDUD3omAlHA"   # Girl Rules official trailer
+
+  - pairing_id: view_mim
+    label_id: gmmtv
+    genre: GL
+    artist_1: "วิว เบญญาภา"
+    artist_2: "มิ้ม รัตนวดี"
+    series: "Girl Rules กฎหลัก...ห้ามรักเธอ"
+    youtube_video_ids:
+      - "lDUD3omAlHA"   # Girl Rules official trailer
+
+  - pairing_id: amy_bonnie
+    label_id: gmmtv
+    genre: GL
+    artist_1: "เอมี่ ทสร"
+    artist_2: "บอนนี่ ภัสรสรณ์"
+    series: "เงาใต้พระจันทร์ (Moon Shadow)"
+    youtube_video_ids: []
+
+  - pairing_id: june_mewnich
+    label_id: gmmtv
+    genre: GL
+    artist_1: "จูน วรรณวิมล"
+    artist_2: "มิวนิค นันท์นภัส"
+    series: "ให้รักกังวานในใจ (Love's Echoes)"
+    youtube_video_ids: []
+
+  # ---------- GMMTV — BL ----------
+  - pairing_id: dew_tee
+    label_id: gmmtv
+    genre: BL
+    artist_1: "ดิว"
+    artist_2: "ที"
+    series: "Mr.Kill มังงะสั่งตาย"
+    youtube_video_ids: []
+
+  - pairing_id: off_gun
+    label_id: gmmtv
+    genre: BL
+    artist_1: "ออฟ"
+    artist_2: "กัน"
+    series: "Gunshot ผมหลงรักฆาตกร"
+    youtube_video_ids: []
+
+  - pairing_id: first_khaotang
+    label_id: gmmtv
+    genre: BL
+    artist_1: "เฟิร์ส"
+    artist_2: "ข้าวตัง"
+    series: "เคียงมังกร (The Invisible Dragon)"
+    youtube_video_ids: []
+
+  - pairing_id: sky_nani
+    label_id: gmmtv
+    genre: BL
+    artist_1: "สกาย"
+    artist_2: "นานิ"
+    series: "ภารกิจลับ จับ จิ้น เดือด (Arrest and Action)"
+    youtube_video_ids: []
+
+  # ---------- ช่อง 3 — GL ----------
+  - pairing_id: ling_orm
+    label_id: ch3
+    genre: GL
+    artist_1: "หลิงหลิง"
+    artist_2: "ออม"
+    series: "เพียงเธอ (Only You)"
+    youtube_video_ids:
+      - "o8bC6_PASzo"   # Official Teaser
+      - "Siq8flSnMqo"   # Moonlight OST MV (หลิงหลิง)
+      - "JAVLBnd4cdg"   # ระยะไกลของดวงจันทร์ OST MV (ออม)
+
+  - pairing_id: leena_miu
+    label_id: ch3
+    genre: GL
+    artist_1: "ลีน่า"
+    artist_2: "หมิว"
+    series: "TBD"
+    youtube_video_ids: []
+
+  - pairing_id: tan_yada
+    label_id: ch3
+    genre: GL
+    artist_1: "แทน"
+    artist_2: "ญดา"
+    series: "TBD"
+    youtube_video_ids: []
+
+  - pairing_id: um_bam
+    label_id: ch3
+    genre: GL
+    artist_1: "อุ้ม"
+    artist_2: "แบม"
+    series: "TBD"
+    youtube_video_ids: []
+
+# หมายเหตุ: youtube_video_ids ต้องเติมเองหลังค้นหา MV/trailer จริงของแต่ละคู่
+# วิธีหา: เข้า YouTube channel ทางการของ GMMTV / ช่อง 3 ค้นชื่อคู่ + ชื่อซีรีส์

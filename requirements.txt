@@ -1,0 +1,7 @@
+apache-airflow==2.9.0
+dbt-bigquery==1.8.0
+google-cloud-bigquery==3.25.0
+pytrends==4.9.2
+psycopg2-binary==2.9.9
+pyyaml==6.0.1
+requests==2.32.3

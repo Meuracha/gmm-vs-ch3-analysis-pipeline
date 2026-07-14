@@ -1,0 +1,10 @@
+.env
+*.pyc
+__pycache__/
+airflow.db
+logs/
+dbt/target/
+dbt/logs/
+.DS_Store
+gcp-service-account.json
+*-service-account*.json

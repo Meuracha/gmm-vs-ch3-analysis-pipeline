@@ -1,0 +1,39 @@
+name: daily-content-poll
+
+on:
+  schedule:
+    - cron: "0 1 * * *"   # 08:00 เวลาไทย (UTC+7) ทุกวัน
+  workflow_dispatch: {}    # กดรันเองได้จาก GitHub UI เพื่อ test
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests google-cloud-bigquery pytrends pyyaml
+
+      - name: Decode GCP credentials
+        run: |
+          echo "${{ secrets.GCP_SA_KEY_BASE64 }}" | base64 -d > /tmp/gcp-key.json
+
+      - name: Poll YouTube and append to BigQuery
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp-key.json
+        run: python scripts/poll_youtube.py --date $(date -u +%F)
+
+      - name: Poll Google Trends and append to BigQuery
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp-key.json
+        # ใช้ continue-on-error เพราะ Google Trends เป็น unofficial API ที่อาจโดน
+        # rate-limit/block เป็นครั้งคราว — ไม่ควรทำให้ทั้ง workflow fail เพราะแค่ Trends ล้ม
+        continue-on-error: true
+        run: python scripts/poll_trends.py --date $(date -u +%F)
