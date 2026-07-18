@@ -38,7 +38,8 @@ def ensure_table(client: bigquery.Client):
 
 def append_rows(client: bigquery.Client, rows: list[dict]):
     """เขียนข้อมูลแบบ append เข้า Bronze โดยตรง — ใช้ Load Job ไม่ใช่ DML query
-    จึงใช้ได้ในโหมดฟรีโดยไม่ต้องผูก billing account เลย"""
+    จึงใช้ได้ในโหมดฟรีโดยไม่ต้องผูก billing account เลย
+    ความซ้ำซ้อนจาก dual-write จะถูกจัดการที่ Silver layer แทน"""
     if not rows:
         return
     job = client.load_table_from_json(
@@ -52,23 +53,26 @@ def append_rows(client: bigquery.Client, rows: list[dict]):
     job.result()
 
 
-def fetch_trend_score(pytrends: TrendReq, keyword: str, max_retries: int = 3) -> int | None:
-    """ดึง search interest พร้อม retry + exponential backoff"""
+def fetch_trend_batch(pytrends: TrendReq, keywords: list[str], max_retries: int = 1) -> dict:
+    """ดึง search interest ของหลาย keyword พร้อมกันใน 1 request (Google Trends รองรับสูงสุด 5 คำ/ครั้ง)
+    ลดจำนวน request ลงมาก ช่วยเลี่ยงการโดน IP block จาก Google Trends
+    (unofficial API ไม่มี SLA — บล็อกระดับ IP รุนแรงกว่าแค่ rate-limit รายคำขอ)
+    max_retries=1 ชั่วคราว เพื่อให้ workflow จบเร็วตอนทดสอบว่า IP ยังโดนบล็อกอยู่ไหม"""
     for attempt in range(max_retries):
         try:
-            pytrends.build_payload([keyword], timeframe="now 1-d", geo="TH")
+            pytrends.build_payload(keywords, timeframe="now 1-d", geo="TH")
             df = pytrends.interest_over_time()
-            if not df.empty:
-                return int(df[keyword].iloc[-1])
-            return None
+            if df.empty:
+                return {}
+            return {kw: int(df[kw].iloc[-1]) for kw in keywords if kw in df.columns}
         except Exception as e:
-            wait = 60 * (attempt + 1)
-            print(f"[warn] Trends fetch failed for {keyword} (attempt {attempt+1}/{max_retries}): {e}")
+            wait = 90 * (attempt + 1)  # 90s, 180s, 270s — ให้เวลา IP คูลดาวน์นานขึ้น
+            print(f"[warn] Trends batch fetch failed (attempt {attempt+1}/{max_retries}): {e}")
             if attempt < max_retries - 1:
                 print(f"[info] Waiting {wait}s before retry...")
                 time.sleep(wait)
-    print(f"[error] Giving up on {keyword} after {max_retries} attempts")
-    return None
+    print(f"[error] Giving up on batch {keywords} after {max_retries} attempts")
+    return {}
 
 
 def main(snapshot_date: str):
@@ -77,11 +81,19 @@ def main(snapshot_date: str):
     ensure_table(client)
     pytrends = TrendReq(hl="th-TH", tz=420)
 
+    pairings = config["pairings"]
+    keyword_to_pairing = {
+        f'{p["artist_1"]} {p["artist_2"]}': p for p in pairings
+    }
+    all_keywords = list(keyword_to_pairing.keys())
+
     rows = []
-    for pairing in config["pairings"]:
-        keyword = f'{pairing["artist_1"]} {pairing["artist_2"]}'
-        score = fetch_trend_score(pytrends, keyword)
-        if score is not None:
+    # แบ่งเป็นกลุ่มละ 5 คำ (ข้อจำกัดของ Google Trends ต่อ 1 request)
+    for i in range(0, len(all_keywords), 5):
+        batch = all_keywords[i : i + 5]
+        scores = fetch_trend_batch(pytrends, batch)
+        for keyword, score in scores.items():
+            pairing = keyword_to_pairing[keyword]
             rows.append(
                 {
                     "snapshot_date": snapshot_date,
@@ -94,7 +106,7 @@ def main(snapshot_date: str):
                     "ingested_at": datetime.now(timezone.utc).isoformat(),
                 }
             )
-        time.sleep(30)
+        time.sleep(30)  # เว้นช่วงระหว่าง batch
 
     append_rows(client, rows)
     print(f"Done (appended, dedupe handled downstream): {snapshot_date}, {len(rows)} rows")
