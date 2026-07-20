@@ -4,9 +4,12 @@
 labels:
   - label_id: gmmtv
     label_name: "GMMTV"
+    has_mascot_program: true
+    mascot_note: "แต่ละคู่จิ้นมีมาสคอตของตัวเอง อยู่บน X/Instagram เป็นหลัก ไม่ใช่ YouTube — ไม่มี engagement data แยกได้จาก pipeline นี้"
 
   - label_id: ch3
     label_name: "ช่อง 3 (BEC World)"
+    has_mascot_program: false
 
 pairings:
   # ---------- GMMTV — GL ----------
