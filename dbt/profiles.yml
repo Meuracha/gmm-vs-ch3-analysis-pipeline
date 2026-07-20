@@ -8,4 +8,4 @@ gmm_vs_ch3:
       dataset: gmm_ch3_dw
       keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
       threads: 4
-      location: asia-southeast1
+      location: US
