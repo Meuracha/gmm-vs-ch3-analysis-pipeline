@@ -66,7 +66,7 @@ def fetch_trend_batch(pytrends: TrendReq, keywords: list[str], max_retries: int 
                 return {}
             return {kw: int(df[kw].iloc[-1]) for kw in keywords if kw in df.columns}
         except Exception as e:
-            wait = 90 * (attempt + 1)  # 90s, 180s, 270s — ให้เวลา IP คูลดาวน์นานขึ้น
+            wait = 90 * (attempt + 1)
             print(f"[warn] Trends batch fetch failed (attempt {attempt+1}/{max_retries}): {e}")
             if attempt < max_retries - 1:
                 print(f"[info] Waiting {wait}s before retry...")
@@ -82,13 +82,15 @@ def main(snapshot_date: str):
     pytrends = TrendReq(hl="th-TH", tz=420)
 
     pairings = config["pairings"]
+    # ใช้ trend_keyword (ship name ที่แฟนคลับใช้ค้นหาจริง เช่น "หลิงออม")
+    # แทนการต่อชื่อเต็ม artist_1+artist_2 ที่แทบไม่มีใครค้นหาแบบนั้นจริง
+    # (ผลคือ interest_score ออกมาเป็น 0 ทุกแถวตอนที่ยังใช้ชื่อเต็ม)
     keyword_to_pairing = {
-        f'{p["artist_1"]} {p["artist_2"]}': p for p in pairings
+        p.get("trend_keyword", f'{p["artist_1"]} {p["artist_2"]}'): p for p in pairings
     }
     all_keywords = list(keyword_to_pairing.keys())
 
     rows = []
-    # แบ่งเป็นกลุ่มละ 5 คำ (ข้อจำกัดของ Google Trends ต่อ 1 request)
     for i in range(0, len(all_keywords), 5):
         batch = all_keywords[i : i + 5]
         scores = fetch_trend_batch(pytrends, batch)
@@ -106,7 +108,7 @@ def main(snapshot_date: str):
                     "ingested_at": datetime.now(timezone.utc).isoformat(),
                 }
             )
-        time.sleep(30)  # เว้นช่วงระหว่าง batch
+        time.sleep(30)
 
     append_rows(client, rows)
     print(f"Done (appended, dedupe handled downstream): {snapshot_date}, {len(rows)} rows")

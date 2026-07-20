@@ -15,6 +15,7 @@ pairings:
     genre: GL
     artist_1: "มิ้ลค์ พรรษา"
     artist_2: "เลิฟ ภัทรานิษฐ์"
+    trend_keyword: "มิ้ลค์เลิฟ"   # ship name ที่แฟนคลับใช้ค้นหาจริง (ต่างจากชื่อเต็มทางการ)
     series: "Ditto ระฟ้าหล่นสวรรค์"
     youtube_video_ids:
       - "30LfbsWHCW4"   # Official pilot trailer Ditto (GMMTV channel, พ.ย. 2025)
@@ -25,6 +26,7 @@ pairings:
     genre: GL
     artist_1: "น้ำตาล ทิพนารี"
     artist_2: "ฟิล์ม รชานันท์"
+    trend_keyword: "น้ำตาลฟิล์ม"
     series: "Girl Rules กฎหลัก...ห้ามรักเธอ"
     youtube_video_ids:
       - "lDUD3omAlHA"   # Girl Rules official trailer
@@ -34,6 +36,7 @@ pairings:
     genre: GL
     artist_1: "วิว เบญญาภา"
     artist_2: "มิ้ม รัตนวดี"
+    trend_keyword: "วิวมิ้ม"
     series: "Girl Rules กฎหลัก...ห้ามรักเธอ"
     youtube_video_ids:
       - "lDUD3omAlHA"   # Girl Rules official trailer
@@ -43,6 +46,7 @@ pairings:
     genre: GL
     artist_1: "เอมี่ ทสร"
     artist_2: "บอนนี่ ภัสรสรณ์"
+    trend_keyword: "เอมี่บอนนี่"
     series: "เงาใต้พระจันทร์ (Moon Shadow)"
     youtube_video_ids: []
 
@@ -51,6 +55,7 @@ pairings:
     genre: GL
     artist_1: "จูน วรรณวิมล"
     artist_2: "มิวนิค นันท์นภัส"
+    trend_keyword: "จูนมิวนิค"
     series: "ให้รักกังวานในใจ (Love's Echoes)"
     youtube_video_ids: []
 
@@ -60,6 +65,7 @@ pairings:
     genre: BL
     artist_1: "ดิว"
     artist_2: "ที"
+    trend_keyword: "ดิวที"
     series: "Mr.Kill มังงะสั่งตาย"
     youtube_video_ids: []
 
@@ -68,6 +74,7 @@ pairings:
     genre: BL
     artist_1: "ออฟ"
     artist_2: "กัน"
+    trend_keyword: "ออฟกัน"
     series: "Gunshot ผมหลงรักฆาตกร"
     youtube_video_ids: []
 
@@ -76,6 +83,7 @@ pairings:
     genre: BL
     artist_1: "เฟิร์ส"
     artist_2: "ข้าวตัง"
+    trend_keyword: "เฟิร์สข้าวตัง"
     series: "เคียงมังกร (The Invisible Dragon)"
     youtube_video_ids: []
 
@@ -84,6 +92,7 @@ pairings:
     genre: BL
     artist_1: "สกาย"
     artist_2: "นานิ"
+    trend_keyword: "สกายนานิ"
     series: "ภารกิจลับ จับ จิ้น เดือด (Arrest and Action)"
     youtube_video_ids: []
 
@@ -93,6 +102,7 @@ pairings:
     genre: GL
     artist_1: "หลิงหลิง"
     artist_2: "ออม"
+    trend_keyword: "หลิงออม"
     series: "เพียงเธอ (Only You)"
     youtube_video_ids:
       - "o8bC6_PASzo"   # Official Teaser
@@ -104,6 +114,7 @@ pairings:
     genre: GL
     artist_1: "ลีน่า"
     artist_2: "หมิว"
+    trend_keyword: "ลีน่าหมิว"
     series: "TBD"
     youtube_video_ids: []
 
@@ -112,6 +123,7 @@ pairings:
     genre: GL
     artist_1: "แทน"
     artist_2: "ญดา"
+    trend_keyword: "แทนญดา"
     series: "TBD"
     youtube_video_ids: []
 
@@ -120,6 +132,7 @@ pairings:
     genre: GL
     artist_1: "อุ้ม"
     artist_2: "แบม"
+    trend_keyword: "อุ้มแบม"
     series: "TBD"
     youtube_video_ids: []
 
