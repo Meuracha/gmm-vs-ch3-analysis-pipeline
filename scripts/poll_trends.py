@@ -1,5 +1,5 @@
 """
-ดึง Google Trends search interest เขียนลง BigQuery แบบ append (Load Job, ไม่ใช่ DML)
+ดึง Google Trends search interest เขียนลง BigQuery แบบ idempotent (MERGE)
 """
 import os
 import time
@@ -56,17 +56,16 @@ def append_rows(client: bigquery.Client, rows: list[dict]):
 def fetch_trend_batch(pytrends: TrendReq, keywords: list[str], max_retries: int = 1) -> dict:
     """ดึง search interest ของหลาย keyword พร้อมกันใน 1 request (Google Trends รองรับสูงสุด 5 คำ/ครั้ง)
     ลดจำนวน request ลงมาก ช่วยเลี่ยงการโดน IP block จาก Google Trends
-    (unofficial API ไม่มี SLA — บล็อกระดับ IP รุนแรงกว่าแค่ rate-limit รายคำขอ)
-    max_retries=1 ชั่วคราว เพื่อให้ workflow จบเร็วตอนทดสอบว่า IP ยังโดนบล็อกอยู่ไหม"""
+    (unofficial API ไม่มี SLA — บล็อกระดับ IP รุนแรงกว่าแค่ rate-limit รายคำขอ)"""
     for attempt in range(max_retries):
         try:
-            pytrends.build_payload(keywords, timeframe="now 1-d", geo="TH")
+            pytrends.build_payload(keywords, timeframe="today 1-m", geo="TH")
             df = pytrends.interest_over_time()
             if df.empty:
                 return {}
             return {kw: int(df[kw].iloc[-1]) for kw in keywords if kw in df.columns}
         except Exception as e:
-            wait = 90 * (attempt + 1)
+            wait = 90 * (attempt + 1)  # 90s, 180s, 270s — ให้เวลา IP คูลดาวน์นานขึ้น
             print(f"[warn] Trends batch fetch failed (attempt {attempt+1}/{max_retries}): {e}")
             if attempt < max_retries - 1:
                 print(f"[info] Waiting {wait}s before retry...")
@@ -91,24 +90,25 @@ def main(snapshot_date: str):
     all_keywords = list(keyword_to_pairing.keys())
 
     rows = []
-    for i in range(0, len(all_keywords), 5):
-        batch = all_keywords[i : i + 5]
-        scores = fetch_trend_batch(pytrends, batch)
-        for keyword, score in scores.items():
-            pairing = keyword_to_pairing[keyword]
+    # ทดสอบ: query ทีละคำ (ไม่ batch) + timeframe กว้างขึ้น เพื่อแยกว่าปัญหาอยู่ที่
+    # relative scaling ภายใน batch หรือ search volume ต่ำจริงในช่วง 1 วัน
+    for keyword in all_keywords:
+        scores = fetch_trend_batch(pytrends, [keyword])
+        for kw, score in scores.items():
+            pairing = keyword_to_pairing[kw]
             rows.append(
                 {
                     "snapshot_date": snapshot_date,
                     "pairing_id": pairing["pairing_id"],
                     "label_id": pairing["label_id"],
                     "genre": pairing["genre"],
-                    "keyword": keyword,
+                    "keyword": kw,
                     "country": "TH",
                     "interest_score": score,
                     "ingested_at": datetime.now(timezone.utc).isoformat(),
                 }
             )
-        time.sleep(30)
+        time.sleep(20)
 
     append_rows(client, rows)
     print(f"Done (appended, dedupe handled downstream): {snapshot_date}, {len(rows)} rows")
