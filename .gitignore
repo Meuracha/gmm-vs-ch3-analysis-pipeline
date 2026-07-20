@@ -8,3 +8,5 @@ dbt/logs/
 .DS_Store
 gcp-service-account.json
 *-service-account*.json
+dbt/.user.yml
+.user.yml
