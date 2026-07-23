@@ -16,7 +16,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install requests google-cloud-bigquery pytrends pyyaml
+        run: pip install requests google-cloud-bigquery pytrends pyyaml dbt-bigquery
 
       - name: Decode GCP credentials
         run: |
@@ -33,7 +33,14 @@ jobs:
         env:
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp-key.json
-        # ใช้ continue-on-error เพราะ Google Trends เป็น unofficial API ที่อาจโดน
-        # rate-limit/block เป็นครั้งคราว — ไม่ควรทำให้ทั้ง workflow fail เพราะแค่ Trends ล้ม
         continue-on-error: true
         run: python scripts/poll_trends.py --date $(date -u +%F)
+
+      - name: Run dbt (Bronze → Silver → Gold)
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp-key.json
+        working-directory: dbt
+        run: |
+          dbt run
+          dbt test || true
