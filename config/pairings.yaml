@@ -4,12 +4,12 @@
 labels:
   - label_id: gmmtv
     label_name: "GMMTV"
-    has_mascot_program: true
+    has_mascot_program: true   # GEMMISTRY SOUL บริหารมาสคอต 27 ตัว ("GMMTV Fandom Characters")
     mascot_note: "แต่ละคู่จิ้นมีมาสคอตของตัวเอง อยู่บน X/Instagram เป็นหลัก ไม่ใช่ YouTube — ไม่มี engagement data แยกได้จาก pipeline นี้"
 
   - label_id: ch3
     label_name: "ช่อง 3 (BEC World)"
-    has_mascot_program: false
+    has_mascot_program: false   # ไม่พบระบบมาสคอตที่เป็นทางการแบบเดียวกัน
 
 pairings:
   # ---------- GMMTV — GL ----------
@@ -51,7 +51,8 @@ pairings:
     artist_2: "บอนนี่ ภัสรสรณ์"
     trend_keyword: "เอมี่บอนนี่"
     series: "เงาใต้พระจันทร์ (Moon Shadow)"
-    youtube_video_ids: []
+    youtube_video_ids:
+      - "LMKBoo8bvaw"   # Official trailer (GMMTV 2026)
 
   - pairing_id: june_mewnich
     label_id: gmmtv
@@ -61,6 +62,16 @@ pairings:
     trend_keyword: "จูนมิวนิค"
     series: "ให้รักกังวานในใจ (Love's Echoes)"
     youtube_video_ids: []
+
+  - pairing_id: jan_jingjing
+    label_id: gmmtv
+    genre: GL
+    artist_1: "แจน พลอยชมพู"
+    artist_2: "จิงจิง ยู"
+    trend_keyword: "แจนจิงจิง"
+    series: "ลัลล์ไม่ชอบไวน์ (Enemies With Benefits)"
+    youtube_video_ids:
+      - "4K__c9385LE"   # Official Trailer
 
   # ---------- GMMTV — BL ----------
   - pairing_id: dew_tee
@@ -118,8 +129,9 @@ pairings:
     artist_1: "ลีน่า"
     artist_2: "หมิว"
     trend_keyword: "ลีน่าหมิว"
-    series: "TBD"
-    youtube_video_ids: []
+    series: "รักสุดท้าย My Safe Zone"
+    youtube_video_ids:
+      - "6b4UnDCGYsI"   # Official Pilot (Ch3Thailand)
 
   - pairing_id: tan_yada
     label_id: ch3
@@ -136,8 +148,9 @@ pairings:
     artist_1: "อุ้ม"
     artist_2: "แบม"
     trend_keyword: "อุ้มแบม"
-    series: "TBD"
-    youtube_video_ids: []
+    series: "Fulfill รักเติมเต็ม"
+    youtube_video_ids:
+      - "Cmjc3aSthDc"   # Official Pilot (#BECWorldOriginalSeries)
 
 # หมายเหตุ: youtube_video_ids ต้องเติมเองหลังค้นหา MV/trailer จริงของแต่ละคู่
 # วิธีหา: เข้า YouTube channel ทางการของ GMMTV / ช่อง 3 ค้นชื่อคู่ + ชื่อซีรีส์
